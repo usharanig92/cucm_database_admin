@@ -98,6 +98,7 @@ def execute_sql_query(shell, sql) -> None:
     return
 
 
+# Updates all line CSS and call forward CSS.
 def update_css(Global_CSS, shell, number):
     for old_css, new_css in Global_CSS.items():
         sql = f"run sql update numplan set fkcallingsearchspace_sharedlineappear=(select pkid from callingsearchspace where name='{new_css}') where fkcallingsearchspace_sharedlineappear=(select pkid from callingsearchspace where name='{old_css}') and dnorpattern like '{number}'"
@@ -136,9 +137,11 @@ def main() -> None:
         message="Enter the CUCM username which has admin access",
     ).execute()
     cucm_node_password = inquirer.secret(
-        message="Enter the CUCM node password for username admin",
+        message="Enter the password for the above username",
     ).execute()
-    shell = InitializedCiscoShell(hostname=cucm_node_name, username=cucm_node_user, password=cucm_node_password)
+    shell = InitializedCiscoShell(
+        hostname=cucm_node_name, username=cucm_node_user, password=cucm_node_password
+    )
     Global_CSS = {
         "Alpha-Primary-CSS": "Outbound-Node-Gamma-CSS",
         "Beta-Routing-CSS": "Inbound-Gateway-Delta-CSS",
